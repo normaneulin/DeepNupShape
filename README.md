@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This project explores nucleosome positioning prediction using deep learning, comparing sequence-only and sequence+shape feature approaches. We implement the original DeepNup model and an enhanced variant that incorporates DNA shape information extracted via DNAShapeR.
+This repo is for nucleosome positioning prediction using deep learning, comparing sequence-only and sequence+shape feature approaches. I used the original DeepNup model and an enhanced variant that uses DNA shape information extracted via DNAShapeR as an auxillary input.
 
 ## Main Contributions
 
@@ -26,6 +26,8 @@ This project explores nucleosome positioning prediction using deep learning, com
 | **DeepNup (Original)** | Sequence Only | 0.4893 | 0.4882 | 0.5029 | -0.0065 | 0.6209 |
 | **DeepNup + Shapes** | Sequence + Shapes | 0.5092 | 0.4990 | 0.5077 | +0.0061 | 0.3808 |
 | **Improvement** | - | **+1.99%** | **+1.07%** | **+0.48%** | **+0.0126** | **-23.41%** |
+
+3-fold cross validation was used with only 20 epochs per fold. This model evalutaion was used on both approaches.
 
 ### Key Findings
 
