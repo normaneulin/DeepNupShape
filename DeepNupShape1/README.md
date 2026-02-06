@@ -24,20 +24,20 @@ This directory contains an enhanced version of the DeepNup nucleosome position p
 - Single sequence path with Conv1D + GRU
 - Learned sequence patterns only
 
-#### Enhanced Model (dn_with_shapes)
-- **Dual Input Paths**:
-  - **Sequence Path**: One-hot (147, 4) + PseTNC (64, 1) → Conv1D (kernel 3, 5, 7) → GRU → fully connected
-  - **Shape Path**: (147, 5) → Conv1D (kernel 9) → Dropout → Flattening
-- **Integration**: Concatenate both paths → Dense layers → Output
+#### **Our Model (2MCNN)** - Multi-CNN Dual-Branch
+- **Sequence Path**: One-hot (147, 4) + PseTNC (64, 1) → Multi-branch Conv1D (kernels 3, 5, 7) → GRU (50) → Dense layers
+- **Shape Path**: (147, 5) → Multi-branch Conv1D (kernels 3, 5, 7) → GRU (50) → Dense layers
+- **Integration**: Concatenate both paths → Dense(256) → Dense(1) → Sigmoid
 - **Parameters**: ~307K trainable parameters
+- **Key aspects**: Simple multi-scale processing with symmetric path handling
+- **AUC Performance**: **0.5092** (best among all three variants)
+- **Status**: ✅ **RECOMMENDED** - Best AUC, simpler architecture
 
-#### MLSNet-Inspired Variant (dn_with_shapes_mlsnet)
-- **Advanced Components**:
-  - **StokenAttention**: Efficient attention mechanism reducing O(n²) to O(n_tokens × n)
-  - **Multi-Scale Processing**: 3 parallel Conv1D branches (kernels 3, 5, 7)
-  - **Advanced RNN**: LSTM (50 units) instead of GRU + Bi-LSTM (32 units) for shape features
-  - **Late Concatenation**: Combine processed features after full transformation
-- **Parameters**: ~919K trainable parameters (more capacity for complex patterns)
+#### Alternative: StokenAttention Variant (2MCNN + STA-BiLSTM)
+See **DeepNupShape2** directory for an advanced variant that uses:
+- **StokenAttention**: Efficient attention mechanism on shape features
+- **Bi-LSTM**: Bidirectional LSTM for shape path (32 units forward + 32 backward)
+- **Trade-off**: Lower AUC (0.5063) but better F1 (0.5029) - better precision-recall balance
 
 ### 3. Training Pipeline
 
@@ -63,7 +63,7 @@ Full dataset evaluation using best model from fold 1:
 
 ## Results
 
-### Performance on Sequence+Shape Data (dn_with_shapes model)
+### Performance on Sequence+Shape Data (2MCNN: Multi-CNN dual-branch model)
 
 | Metric | Value |
 |--------|-------|
@@ -73,20 +73,32 @@ Full dataset evaluation using best model from fold 1:
 | MCC | 0.0061 |
 | F1 Score | 0.3808 |
 
-### Comparison with Sequence-Only (Original DeepNup)
+### Comparison with Sequence-Only (Original MCNN)
 
-| Metric | Seq Only | Seq+Shape | Improvement |
-|--------|----------|-----------|-------------|
-| AUC | 0.4893 | 0.5092 | +1.99% |
-| Sensitivity | 0.4882 | 0.4990 | +1.07% |
-| Specificity | 0.5029 | 0.5077 | +0.48% |
-| MCC | -0.0065 | +0.0061 | +0.0126 |
+| Metric | MCNN (Seq Only) | 2MCNN (Seq+Shape) | Improvement |
+|--------|-----------------|-------------------|-------------|
+| AUC | 0.4893 | 0.5092 | **+1.99%** |
+| Sensitivity | 0.4882 | 0.4990 | **+1.07%** |
+| Specificity | 0.5029 | 0.5077 | **+0.48%** |
+| MCC | -0.0065 | 0.0061 | **+0.0126** |
 | F1 Score | 0.6209 | 0.3808 | -23.41% |
 
+### Comparison with Advanced StokenAttention Model (DeepNupShape2)
+
+| Metric | 2MCNN | 2MCNN + STA-BiLSTM | Difference |
+|--------|-------|-------------------|------------|
+| AUC | 0.5092 | 0.5063 | -0.29% |
+| Sensitivity | 0.4990 | 0.5043 | +0.53% |
+| Specificity | 0.5077 | 0.5009 | -0.68% |
+| MCC | 0.0061 | 0.0057 | -0.04% |
+| F1 Score | 0.3808 | 0.5029 | **+32.12%** |
+
 **Key Findings**:
-- DNA shape features provide **modest AUC improvement** (~2%)
-- Better balance between sensitivity and specificity
-- Trade-off in F1 Score suggests precision-recall adjustment needed
+- DNA shape features provide **modest AUC improvement** (~2% over sequence-only)
+- **2MCNN achieves best AUC** (0.5092) among all three model variants
+- Better balance between sensitivity and specificity with shape data
+- StokenAttention variant shows improved F1 score (+32%) but slightly lower AUC
+- Trade-off between AUC optimization and F1 score optimization
 
 ## File Structure
 

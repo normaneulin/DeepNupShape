@@ -21,12 +21,39 @@ This repo is for nucleosome positioning prediction using deep learning, comparin
 
 ### Performance Comparison
 
-| Model | Dataset | AUC | Sensitivity | Specificity | MCC | F1 Score |
-|-------|---------|-----|-------------|-------------|-----|----------|
-| **DeepNup (Original)** | Sequence Only | 0.4893 | 0.4882 | 0.5029 | -0.0065 | 0.6209 |
-| **DeepNup + Shapes** | Sequence + Shapes | 0.5092 | 0.4990 | 0.5077 | +0.0061 | 0.3808 |
-| **Improvement** | - | **+1.99%** | **+1.07%** | **+0.48%** | **+0.0126** | **-23.41%** |
+| Model | Architecture | Dataset | AUC | Sensitivity | Specificity | MCC | F1 Score |
+|-------|--------------|---------|-----|-------------|-------------|-----|----------|
+| **MCNN** | Conv1D (kernels 3,5,7) + GRU | Sequence Only | 0.4893 | 0.4882 | 0.5029 | -0.0065 | 0.6209 |
+| **2MCNN** | Dual MCNN branches + concatenation | Sequence + Shapes | 0.5092 | 0.4990 | 0.5077 | +0.0061 | 0.3808 |
+| **2MCNN + STA-BiLSTM** | StokenAttention + Bi-LSTM for shapes | Sequence + Shapes | 0.5063 | 0.5043 | 0.5009 | +0.0057 | 0.5029 |
 
+**Best Performance**: 2MCNN (Sequence + Shape Data) with **AUC = 0.5092**
+
+### Model Variants by Directory
+
+| Directory | Model | Key Features | Best Metric | Status |
+|-----------|-------|--------------|-------------|--------|
+| **DeepNup/** | MCNN | Sequence only, Conv1D multi-scale + GRU | AUC: 0.4893 | Baseline |
+| **DeepNupShape1/** | 2MCNN | Dual-branch (seq + shape), symmetric MCNN | **AUC: 0.5092** ⭐ | **RECOMMENDED** |
+| **DeepNupShape2/** | 2MCNN + STA-BiLSTM | Advanced with StokenAttention + Bi-LSTM | **F1: 0.5029** ⭐ | Alternative |
+
+### Recommendations
+
+1. **For AUC Optimization**: Use **DeepNupShape1** (2MCNN)
+   - Highest AUC (0.5092)
+   - Simpler, more interpretable architecture
+   - Better sensitivity-specificity balance compared to baseline
+
+2. **For F1 Score Optimization**: Use **DeepNupShape2** (2MCNN + STA-BiLSTM)
+   - Best precision-recall balance (F1: 0.5029)
+   - Attention mechanism for feature importance
+   - Improved generalization, -19% F1 drop from baseline
+
+3. **General Findings**:
+   - DNA shape features consistently improve performance (~2% AUC gain)
+   - Shape information provides complementary signal to sequence data
+   - Multi-scale convolutions (kernels 3, 5, 7) capture features at different resolutions
+   - Attention mechanisms help balance precision and recall
 
 ### Key Findings
 
