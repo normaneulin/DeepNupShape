@@ -42,7 +42,7 @@ foldName = args.foldName
 
 metricsList = [evaluator.acc, evaluator.precision, evaluator.recall, evaluator.f1score, evaluator.aucScore]
 
-epochs = 200
+epochs = 20
 batch_size = 64
 shuffle = False 
 seed = None  
@@ -53,7 +53,7 @@ fNum = 1
 if (os.path.exists(os.path.join(outPath, "elapsed.json"))):
     os.path.join(outPath, "elapsed.json")
 
-m = "dn"
+m = "dn
 
 # Create and set model save dir
 modelPath = os.path.join(outPath, expName, "models", m)
@@ -85,7 +85,7 @@ data2 = PseTNC_feature
 
 # Create folder to save fold dataset and build kfold
 foldPath = os.path.join(outPath, expName, foldName)
-folds = evaluator.build_kfold(data1, data2, labels, k=10, shuffle=shuffle, seed=seed)
+folds = evaluator.build_kfold(data1, data2, labels, k=3, shuffle=shuffle, seed=seed)
 # pdb.set_trace()
 with open(foldPath, "wb") as fp:
     pickle.dump(folds, fp)
@@ -107,9 +107,9 @@ for fold in folds:
     
     tf.keras.backend.clear_session()
     modelCallbacks = [
-        tf.keras.callbacks.ModelCheckpoint(os.path.join(modelPath, "{}_bestModel-fold{}.hdf5".format(m, i)),
+        tf.keras.callbacks.ModelCheckpoint(os.path.join(modelPath, "{}_bestModel-fold{}.keras".format(m, i)),
                                            monitor='val_loss', verbose=0, save_best_only=True, save_weights_only=False,
-                                           mode='auto', period=1),
+                                           mode='auto'),
         tf.keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=0, patience=15, verbose=0, mode='auto',
                                          baseline=None, restore_best_weights=False)
     ]

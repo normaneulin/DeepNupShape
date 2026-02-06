@@ -75,7 +75,7 @@ def dn(input_size=(147, 4), input2_size=(64, 1),
     model = tf.keras.models.Model(inputs=[input1, input2], outputs=y1)
 
     # Optimizer
-    optim = tf.keras.optimizers.Adam(lr=learn_rate)
+    optim = tf.keras.optimizers.Adam(learning_rate=learn_rate)
     # Compile
     if (metrics != None):
         model.compile(optimizer=optim, loss=loss,

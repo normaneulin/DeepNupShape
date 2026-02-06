@@ -70,11 +70,11 @@ else:
     i = 1
     for fold in folds:
         #Check if model alredy exists
-        if(os.path.exists(os.path.join(modelPath, "{}_bestModel-fold{}.hdf5".format(m, i)))):
+        if(os.path.exists(os.path.join(modelPath, "{}_bestModel-fold{}.keras".format(m, i)))):
 
             # load json and create model
-            model = load_model(os.path.join(modelPath, "{}_bestModel-fold{}.hdf5".format(m, i)),
-                            custom_objects={"precision": evaluator.precision, "recall": evaluator.recall, "f1score": evaluator.f1score, "aucScore": evaluator.aucScore})
+            model = load_model(os.path.join(modelPath, "{}_bestModel-fold{}.keras".format(m, i)),
+                            custom_objects={"precision": evaluator.precision, "recall": evaluator.recall, "f1score": evaluator.f1score, "aucScore": evaluator.aucScore, "acc": evaluator.acc})
             print(model.summary())
         else:
             print("Error: Model not Found")
