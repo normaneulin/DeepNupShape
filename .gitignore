@@ -1,0 +1,21 @@
+# Large pickle files (>100MB)
+folds.pickle
+folds_shape.pickle
+*.pickle
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.log
