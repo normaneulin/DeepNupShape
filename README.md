@@ -27,16 +27,15 @@ This repo is for nucleosome positioning prediction using deep learning, comparin
 | **DeepNup + Shapes** | Sequence + Shapes | 0.5092 | 0.4990 | 0.5077 | +0.0061 | 0.3808 |
 | **Improvement** | - | **+1.99%** | **+1.07%** | **+0.48%** | **+0.0126** | **-23.41%** |
 
-3-fold cross validation was used with only 20 epochs per fold. This model evalutaion was used on both approaches.
 
 ### Key Findings
 
-✅ **Advantages of Shape Features**:
+**Advantages of Shape Features**:
 - AUC improved by ~2% (0.4893 → 0.5092)
 - Better MCC (Matthews Correlation Coefficient) reflecting improved class balance
 - Modest but consistent improvements in sensitivity/specificity trade-off
 
-⚠️ **Trade-offs**:
+**Trade-offs**:
 - F1 Score decreased (0.6209 → 0.3808), indicating precision-recall shift
 - Performance still near baseline (AUC ≈ 0.5) suggests dataset or modeling challenges
 - Shape features provide complementary signal but not transformative
